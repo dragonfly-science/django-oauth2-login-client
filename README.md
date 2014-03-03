@@ -20,32 +20,34 @@ but this package requires a more recent commit:
 
 ### In settings.py...
 
-    ...
-    AUTHENTICATION_BACKENDS = (
-        'oauth2_login_client.backends.OAuthBackend',
-        'django.contrib.auth.backends.ModelBackend',
-    )
-    ...
+```python
+...
+AUTHENTICATION_BACKENDS = (
+    'oauth2_login_client.backends.OAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+...
 
-    # Provider
-    OAUTH_SERVER            = 'https://oauth2.provider.example.com'
+# Provider
+OAUTH_SERVER            = 'https://oauth2.provider.example.com'
 
-    # General urls on your provider:
-    OAUTH_AUTHORIZATION_URL = '/o/authorize'   # Authorization URL
-    OAUTH_TOKEN_URL         = '/o/token/'      # Access token URL
+# General urls on your provider:
+OAUTH_AUTHORIZATION_URL = '/o/authorize'   # Authorization URL
+OAUTH_TOKEN_URL         = '/o/token/'      # Access token URL
 
-    # The URL of some protected resource on your oauth2 server which you have configured to serve
-    # json-encoded user information (containing at least an email) for the user associated
-    # with a given access token.
-    OAUTH_RESOURCE_URL = '/userinfo'
+# The URL of some protected resource on your oauth2 server which you have configured to serve
+# json-encoded user information (containing at least an email) for the user associated
+# with a given access token.
+OAUTH_RESOURCE_URL = '/userinfo'
 
-    # From the configuration of your client site in the oauth2 provider
-    OAUTH_CLIENT_ID         = 'gzUdompY9CtjguqXfgmZ;qM-Sg_JH=Pe2zZswUKo'
-    OAUTH_CLIENT_SECRET     = 'gMfBtGimi=NjdYvnLsU@!R@k4VEkruV1-Zkt.KEQ1Ead1Z;0OE?P:K2maN3seOCS..........'
+# From the configuration of your client site in the oauth2 provider
+OAUTH_CLIENT_ID         = 'gzUdompY9CtjguqXfgmZ;qM-Sg_JH=Pe2zZswUKo'
+OAUTH_CLIENT_SECRET     = 'gMfBtGimi=NjdYvnLsU@!R@k4VEkruV1-Zkt.KEQ1Ead1Z;0OE?P:K2maN3seOCS..........'
 
-    # From 'oauth2_login_client.urls'
-    OAUTH_CALLBACK_URL      = 'https://consumer.site.example.com/oauth/login/callback'
-    ...
+# From 'oauth2_login_client.urls'
+OAUTH_CALLBACK_URL      = 'https://consumer.site.example.com/oauth/login/callback'
+...
+```
 
 ### Login protected views
 
@@ -54,18 +56,20 @@ to decorate these with your own custom decorator, and then put the
 oauth2\_login\_client.views.login\_redirect function inside that
 custom decorator, e.g. in decorators.py:
 
-    from django.core.exceptions import PermissionDenied
-    from oauth2_login_client.views import login_redirect
-    from somewhere.else import my_user_has_permission
-    ...
-    def my_custom_permission_check(view_function):
-        def _view_function(request, *args, **kwargs):
-            if not my_user_has_permission(request.user, **kwargs):
-                if not user.is_authenticated():
-                    return login_redirect(request)
-                raise PermissionDenied
-            return view_function(request, *args, **kwargs)
-        return _view_function
+```python
+from django.core.exceptions import PermissionDenied
+from oauth2_login_client.views import login_redirect
+from somewhere.else import my_user_has_permission
+...
+def my_custom_permission_check(view_function):
+    def _view_function(request, *args, **kwargs):
+        if not my_user_has_permission(request.user, **kwargs):
+            if not user.is_authenticated():
+                return login_redirect(request)
+            raise PermissionDenied
+        return view_function(request, *args, **kwargs)
+    return _view_function
+```
 
 That way, logged-out users will automatically be bounced to the auth
 server when trying to access a protected page on the client, and will
