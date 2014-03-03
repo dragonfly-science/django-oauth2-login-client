@@ -1,17 +1,16 @@
-# Oauth2 consumer for centralised django authentication
+## Oauth2 consumer for centralised django authentication
 
 You have a bunch of django 1.5+ sites, which share some users in
 common, and you would like your users to be able to manage their
 passwords in a single place.
 
-## Requirements
-
-You have a centralised oauth2 provider that you control (possibly
+You also have a centralised oauth2 provider that you control, possibly
 another django site using the oauth2_provider module from
-django-oauth-toolkit).  Users are able to reset and change their
-passwords on that site.  All your sites use SSL.
+[django-oauth-toolkit](https://github.com/evonove/django-oauth-toolkit).
+Users are able to reset and change their passwords on that site.  All
+your sites use SSL.
 
-## Installation
+### Installation
 
 As of 2014-03-03, the latest version of requests-oauthlib is 0.4.0,
 but this package requires a more recent commit:
@@ -19,7 +18,7 @@ but this package requires a more recent commit:
     pip install git+https://github.com/requests/requests-oauthlib.git@0cb31a60e2#egg=requests_oauthlib
     pip install git+https://github.com/dragonfly-science/django-oauth2-login-client.git
 
-## settings.py
+### In settings.py...
 
     ...
     AUTHENTICATION_BACKENDS = (
@@ -48,7 +47,7 @@ but this package requires a more recent commit:
     OAUTH_CALLBACK_URL      = 'https://consumer.site.example.com/oauth/login/callback'
     ...
 
-## Login protected views
+### Login protected views
 
 If you have `@login_required` views in on your site, it may be useful
 to decorate these with your own custom decorator, and then put the
@@ -72,12 +71,12 @@ That way, logged-out users will automatically be bounced to the auth
 server when trying to access a protected page on the client, and will
 come back to the appropriate page after successful authentication.
 
-## Limitations
+### Todo:
 
-Users are identified by email address.
+Users are currently only identified by email address.
 
 Users are not automatically created.
 
 If you have `@login_required` views in any 3rd party apps on your
-site, it may be tricky to automatically redirect logged out users to
+site, it will be tricky to automatically redirect logged out users to
 the authorization server when they hit those views.
