@@ -8,13 +8,21 @@ from oauth2_login_client.utils import get_login_url
 
 def login_redirect(request):
     request.session['next'] = request.GET.get('next', request.path)
-    return redirect(get_login_url())
+    urldata = get_login_url()
+    request.session['oauth_login_state'] = urldata['state']
+    return redirect(urldata['authorization_url'])
 
 def account_redirect(request):
     return redirect(settings.OAUTH_SERVER + '/accounts')
 
 def login_callback(request):
     if 'code' not in request.GET:
+        raise PermissionDenied
+
+    if 'state' not in request.GET:
+        raise PermissionDenied
+
+    if request.session.get('oauth_login_state') != request.GET['state']:
         raise PermissionDenied
 
     user = authenticate(code=request.GET['code'])
