@@ -10,7 +10,7 @@ def oauth_session():
 def get_login_url():
     oauth = oauth_session()
     auth_url = settings.OAUTH_SERVER + settings.OAUTH_AUTHORIZATION_URL
-    authorization_url, state = oauth.authorization_url(auth_url)
+    authorization_url, state = oauth.authorization_url(auth_url, approval_prompt="auto")
     return dict(
         authorization_url=authorization_url,
         state=state,
