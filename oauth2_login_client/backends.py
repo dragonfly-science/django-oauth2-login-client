@@ -25,8 +25,20 @@ class OAuthBackend(ModelBackend):
         if not userdata or 'email' not in userdata:
             return None
 
+        primary = userdata['email']
+
+        emails = [primary]
+        if getattr(settings, 'OAUTH_UPDATE_EMAIL', False):
+            emails += userdata.get('previous_emails', [])
+
         usermodel = get_user_model()
-        try:
-            return usermodel.objects.get(email=userdata['email'])
-        except usermodel.DoesNotExist:
-            return None
+
+        for email in emails:
+            try:
+                user = usermodel.objects.get(email=email)
+                if user.email != primary:
+                    user.email = primary
+                    user.save()
+                return user
+            except usermodel.DoesNotExist:
+                pass
