@@ -1,5 +1,5 @@
 from django.conf.urls import patterns
-from oauth2_login_client.views import *
+from .views import login_redirect, account_redirect, login_callback
 
 urlpatterns = patterns('',
     (r'^login/callback', login_callback),

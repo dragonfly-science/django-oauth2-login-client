@@ -1,10 +1,11 @@
 import logging
+from time import time
 
 from django.conf import settings
 from django.contrib.auth import login as auth_login, authenticate
 from django.shortcuts import redirect
 from django.core.exceptions import PermissionDenied
-from oauth2_login_client.utils import get_login_url
+from .utils import get_login_url
 
 def login_redirect(request):
     request.session['next'] = request.GET.get('next', request.path)
@@ -29,6 +30,9 @@ def login_callback(request):
 
     if user is not None and user.is_active:
         auth_login(request, user)
+        request.session['oauth_token'] = getattr(user, 'oauth_token', None)
+        request.session['oauth_user_data'] = dict(synced_at=time())
+
         return redirect(request.session.get('next', settings.LOGIN_REDIRECT_URL))
 
     raise PermissionDenied

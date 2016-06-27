@@ -47,6 +47,15 @@ OAUTH_CLIENT_SECRET     = 'gMfBtGimi=NjdYvnLsU@!R@k4VEkruV1-Zkt.KEQ1Ead1Z;0OE?P:
 # From 'oauth2_login_client.urls'
 OAUTH_CALLBACK_URL      = 'https://consumer.site.example.com/oauth/login/callback'
 ...
+
+# Optional permissions checking:
+# Check permission based on a client site code passed in by the oauth2 server in the
+# 'sites' element of the user info resource.
+OAUTH_RESOURCE_CLIENT_CODE = 'clientcode'
+
+# To periodically sync user details from auth server
+# Add 'oauth2_login_client.middleware.OAuthMiddleware' to MIDDLEWARE_CLASSES
+OAUTH_USER_SYNC_FREQUENCY = 3600 # seconds
 ```
 
 ### Login protected views
@@ -76,10 +85,6 @@ server when trying to access a protected page on the client, and will
 come back to the appropriate page after successful authentication.
 
 ### Todo:
-
-Users are currently only identified by email address.
-
-Users are not automatically created.
 
 If you have `@login_required` views in any 3rd party apps on your
 site, it will be tricky to automatically redirect logged out users to
