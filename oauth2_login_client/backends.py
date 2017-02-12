@@ -23,7 +23,7 @@ class OAuthBackend(ModelBackend):
             logging.warn("Error response from auth server")
             return None
 
-        userdata = json.loads(r.content)
+        userdata = json.loads(r.content.decode('UTF-8'))
 
         if not userdata or 'email' not in userdata or 'username' not in userdata:
             logging.warn("Username and email not returned by auth server")
