@@ -28,7 +28,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'django>=1.7',
-        'requests-oauthlib>=0.4.0',
+        'requests-oauthlib>=0.4.1',
     ],
     zip_safe=False,
 )

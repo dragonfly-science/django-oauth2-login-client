@@ -12,10 +12,6 @@ your sites use SSL.
 
 ### Installation
 
-As of 2014-03-03, the latest version of requests-oauthlib is 0.4.0,
-but this package requires a more recent commit:
-
-    pip install git+https://github.com/requests/requests-oauthlib.git@0cb31a60e2#egg=requests_oauthlib
     pip install git+https://github.com/dragonfly-science/django-oauth2-login-client.git
 
 ### In settings.py...
