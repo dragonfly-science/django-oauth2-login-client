@@ -4,9 +4,14 @@ import time
 from django.conf import settings
 from django.contrib.auth import logout
 
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    MiddlewareMixin = object
+
 from .utils import oauth_session, sync_user
 
-class OAuthMiddleware(object):
+class OAuthMiddleware(MiddlewareMixin):
     """If user details are stale, fetch and synchronise from the oauth server.
     If the user is no longer allowed to authenticate with the auth server, log
     them out."""
