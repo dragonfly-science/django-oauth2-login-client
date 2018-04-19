@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='RemoteUser',
             fields=[
-                ('user', models.OneToOneField(primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL, help_text=b'Django user')),
+                ('user', models.OneToOneField(primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL, help_text=b'Django user', on_delete=models.CASCADE)),
                 ('remote_username', models.CharField(unique=True, max_length=30)),
             ],
         ),
