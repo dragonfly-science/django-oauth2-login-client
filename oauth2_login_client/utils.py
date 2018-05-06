@@ -40,4 +40,6 @@ def sync_user(user, userdata):
     for e in userdata['email_addresses']:
         if user.emailaddress_set.filter(email=e).exists():
             continue
-        user.emailaddress_set.add(EmailAddress(email=e))
+        emailaddress = EmailAddress(email=e)
+        emailaddress.save()
+        user.emailaddress_set.add(emailaddress)
