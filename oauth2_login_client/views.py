@@ -8,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 from .utils import get_login_url
 
 def login_redirect(request):
-    request.session['next'] = request.GET.get('next', request.path)
+    request.session['next'] = request.GET.get('next', settings.LOGIN_REDIRECT_URL)
     urldata = get_login_url()
     request.session['oauth_login_state'] = urldata['state']
     return redirect(urldata['authorization_url'])
