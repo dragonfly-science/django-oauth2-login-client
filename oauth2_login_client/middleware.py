@@ -1,4 +1,3 @@
-import json
 import logging
 import time
 from django.conf import settings
@@ -48,7 +47,7 @@ class OAuthMiddleware(MiddlewareMixin):
         if token != oauth.token:
             request.session['oauth_token'] = oauth.token
 
-        userdata = json.loads(r.content)
+        userdata = r.json()
 
         if not userdata or 'username' not in userdata:
             return

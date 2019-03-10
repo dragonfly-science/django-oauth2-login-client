@@ -1,5 +1,4 @@
 import logging
-import json
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -23,7 +22,7 @@ class OAuthBackend(ModelBackend):
             logging.warn("Error response from auth server")
             return None
 
-        userdata = json.loads(r.content.decode('UTF-8'))
+        userdata = r.json()
 
         if not userdata or 'email' not in userdata or 'username' not in userdata:
             logging.warn("Username and email not returned by auth server")
