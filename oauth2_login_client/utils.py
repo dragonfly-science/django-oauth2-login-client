@@ -7,6 +7,7 @@ def oauth_session(token=None):
         redirect_uri=settings.OAUTH_CALLBACK_URL,
         auto_refresh_url=settings.OAUTH_SERVER + settings.OAUTH_TOKEN_URL,
         token=token,
+        scope=getattr(settings, 'OAUTH_SCOPE', None),
     )
 
 def get_login_url():

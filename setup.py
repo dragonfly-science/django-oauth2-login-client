@@ -7,7 +7,7 @@ LONG_DESCRIPTION = open('README.md').read()
 
 setup(
     name="django-oauth2-login-client",
-    version="0.3",
+    version="0.4.1",
     description="OAuth2 consumer for authentication by a django-oauth-toolkit site",
     long_description=LONG_DESCRIPTION,
     classifiers=[

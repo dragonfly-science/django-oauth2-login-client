@@ -1,2 +1,2 @@
 Django>=1.5
-git+https://github.com/requests/requests-oauthlib.git@0cb31a60e2#egg=requests_oauthlib
+requests_oauthlib==1.2.0
