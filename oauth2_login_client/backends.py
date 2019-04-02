@@ -8,21 +8,26 @@ from .utils import oauth_session, sync_user
 
 class OAuthBackend(ModelBackend):
 
+    def __init__(self):
+        self.oauth = oauth_session()
+
+    def _extract_userdata(self, response):
+        return response.json()
+
     def authenticate(self, request=None, code=None):
-        oauth = oauth_session()
-        token = oauth.fetch_token(
+        token = self.oauth.fetch_token(
             settings.OAUTH_SERVER + settings.OAUTH_TOKEN_URL,
             code=code,
             client_secret=settings.OAUTH_CLIENT_SECRET,
             verify=getattr(settings, 'OAUTH_VERIFY_SSL', True),
         )
 
-        r = oauth.get(settings.OAUTH_SERVER + settings.OAUTH_RESOURCE_URL)
+        r = self.oauth.get(settings.OAUTH_SERVER + settings.OAUTH_RESOURCE_URL)
         if r.status_code != 200:
             logging.warn("Error response from auth server")
             return None
 
-        userdata = r.json()
+        userdata = self._extract_userdata(r)
 
         if not userdata or 'email' not in userdata or 'username' not in userdata:
             logging.warn("Username and email not returned by auth server")
