@@ -8,7 +8,7 @@ from .utils import oauth_session, sync_user
 
 class OAuthBackend(ModelBackend):
 
-    def authenticate(self, code=None):
+    def authenticate(self, request=None, code=None):
         oauth = oauth_session()
         token = oauth.fetch_token(
             settings.OAUTH_SERVER + settings.OAUTH_TOKEN_URL,
