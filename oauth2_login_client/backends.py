@@ -6,10 +6,14 @@ from django.contrib.auth.backends import ModelBackend
 from .models import RemoteUser
 from .utils import oauth_session, sync_user
 
+
 class OAuthBackend(ModelBackend):
 
     def _extract_userdata(self, response):
         return response.json()
+
+    def _sync_user(self, user, userdata):
+        sync_user(user, userdata)
 
     def authenticate(self, request=None, code=None, redirect_uri=None):
         if redirect_uri is None:
@@ -64,7 +68,7 @@ class OAuthBackend(ModelBackend):
                 user=user, remote_username = userdata['username'])
             user.remoteuser.save()
 
-        sync_user(user, userdata)
+        self._sync_user(user, userdata)
 
         # Send the token back along with the user
         user.oauth_token = token
