@@ -10,10 +10,14 @@ except ImportError:
 
 from .utils import oauth_session, sync_user
 
+
 class OAuthMiddleware(MiddlewareMixin):
     """If user details are stale, fetch and synchronise from the oauth server.
     If the user is no longer allowed to authenticate with the auth server, log
     them out."""
+
+    def _sync_user(self, user, userdata):
+        sync_user(user, userdata)
 
     def process_request(self, request):
         if not request.user.is_authenticated:
@@ -61,6 +65,6 @@ class OAuthMiddleware(MiddlewareMixin):
             logging.warn("Username mismatch")
             return logout(request)
 
-        sync_user(request.user, userdata)
+        self._sync_user(request.user, userdata)
         request.session['oauth_user_data'] = dict(synced_at=time.time())
         return
