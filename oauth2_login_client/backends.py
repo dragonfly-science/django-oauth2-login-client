@@ -1,10 +1,8 @@
 import logging
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
-from .models import RemoteUser
-from .utils import oauth_session, sync_user
+from .utils import oauth_session, sync_user, create_user
 
 
 class OAuthBackend(ModelBackend):
@@ -14,6 +12,9 @@ class OAuthBackend(ModelBackend):
 
     def _sync_user(self, user, userdata):
         sync_user(user, userdata)
+
+    def _create_user(self, userdata):
+        return create_user(userdata)
 
     def authenticate(self, request=None, code=None, redirect_uri=None):
         if redirect_uri is None:
@@ -44,30 +45,7 @@ class OAuthBackend(ModelBackend):
             logging.info("User not authorised for client site")
             return None
 
-        usermodel = get_user_model()
-        try:
-            user = usermodel.objects.get(
-                remoteuser__remote_username=userdata['username'])
-        except usermodel.DoesNotExist:
-            # Create user
-            new_username = userdata['username'][:30]
-            i = 0
-            while usermodel.objects.filter(username=new_username).exists():
-                if i > 1000:
-                    return None
-                i += 1
-                new_username = userdata['username'][:30-len(str(i))] + str(i)
-            user = usermodel.objects.create_user(
-                username   = new_username,
-                email      = userdata['email'],
-                first_name = userdata['first_name'],
-                last_name  = userdata['last_name'],
-            )
-            user.save()
-            user.remoteuser = RemoteUser(
-                user=user, remote_username = userdata['username'])
-            user.remoteuser.save()
-
+        user, _ = self._create_user(userdata)
         self._sync_user(user, userdata)
 
         # Send the token back along with the user
