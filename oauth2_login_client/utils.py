@@ -75,7 +75,7 @@ def create_user(userdata):
         )
     except user_model.DoesNotExist:
         # Create user
-        max_len = RemoteUser.remote_username.max_length
+        max_len = user_model._meta.get_field("username").max_length
 
         new_username = userdata['username'][:max_len]
         i = 0
