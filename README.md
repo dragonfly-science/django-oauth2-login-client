@@ -30,6 +30,7 @@ OAUTH_SERVER            = 'https://oauth2.provider.example.com'
 # General urls on your provider:
 OAUTH_AUTHORIZATION_URL = '/o/authorize'   # Authorization URL
 OAUTH_TOKEN_URL         = '/o/token/'      # Access token URL
+OAUTH_REFRESH_TOKEN_URL = OAUTH_TOKEN_URL  # Refresh Access token URL
 
 # The URL of some protected resource on your oauth2 server which you have configured to serve
 # json-encoded user information (containing at least an email) for the user associated
