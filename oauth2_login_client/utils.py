@@ -5,11 +5,15 @@ from requests_oauthlib.oauth2_session import OAuth2Session
 from .models import RemoteUser
 
 
+# back compatibility: use `OAUTH_TOKEN_URL` if `OAUTH_REFRESH_TOKEN_URL` not present
+OAUTH_REFRESH_TOKEN_URL = getattr(settings, 'OAUTH_REFRESH_TOKEN_URL', settings.OAUTH_TOKEN_URL)
+
+
 def oauth_session(
     token=None,
     client_id=settings.OAUTH_CLIENT_ID,
     redirect_uri=settings.OAUTH_CALLBACK_URL,
-    auto_refresh_url=settings.OAUTH_SERVER + settings.OAUTH_TOKEN_URL,
+    auto_refresh_url=OAUTH_REFRESH_TOKEN_URL,
     scope=getattr(settings, 'OAUTH_SCOPE', None),
     **kwargs
 ):
