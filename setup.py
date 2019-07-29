@@ -27,8 +27,8 @@ setup(
     license='GPLv3+',
     packages=find_packages(),
     install_requires=[
-        'django>=1.7',
-        'requests-oauthlib>=0.4.1',
+        'django>=1.11',
+        'requests-oauthlib>=1.2.0',
     ],
     zip_safe=False,
 )
