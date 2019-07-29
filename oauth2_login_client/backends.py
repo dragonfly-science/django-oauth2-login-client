@@ -31,13 +31,13 @@ class OAuthBackend(ModelBackend):
 
         r = oauth.get(settings.OAUTH_SERVER + settings.OAUTH_RESOURCE_URL)
         if r.status_code != 200:
-            logging.warn("Error response from auth server")
+            logging.warning("Error response from auth server")
             return None
 
         userdata = self._extract_userdata(r)
 
         if not userdata or 'email' not in userdata or 'username' not in userdata:
-            logging.warn("Username and email not returned by auth server")
+            logging.warning("Username and email not returned by auth server")
             return None
 
         site_code = getattr(settings, 'OAUTH_RESOURCE_CLIENT_CODE', None)
