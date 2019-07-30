@@ -13,7 +13,7 @@ def oauth_session(
     token=None,
     client_id=settings.OAUTH_CLIENT_ID,
     redirect_uri=settings.OAUTH_CALLBACK_URL,
-    auto_refresh_url=OAUTH_REFRESH_TOKEN_URL,
+    auto_refresh_url=settings.OAUTH_SERVER + OAUTH_REFRESH_TOKEN_URL,
     scope=getattr(settings, 'OAUTH_SCOPE', None),
     **kwargs
 ):
